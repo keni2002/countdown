@@ -1,38 +1,82 @@
 import { useState, useEffect } from "react"
 import moment from 'moment'
 import List from "./List"
-export default function Counter({ setValues, setReady, ready, confeti, setConfeti, values, state, setIsSet }) {
-    const actual = values.filter(v => v.id === state)[0] //actual object in Proccess
-
+export default function Counter({ setValues, setReady, ready, confeti, setConfeti, values, state, setState, setIsSet }) {
+    let actual = values.filter(v => v.id === state)[0] //actual object in Proccess
     const [showSecond, setShowSecond] = useState(true)
     const [showList, setShowList] = useState(true)
 
 
-    const [remainTime, setRemainTime] = useState(moment.duration(moment(actual.datetime).diff(moment())));
+    const [remainTime, setRemainTime] = useState(moment.duration(moment(actual?.datetime).diff(moment())));
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            const duration = moment.duration(moment(actual.datetime).diff(moment()));
+            const duration = moment.duration(moment(actual?.datetime).diff(moment()));
             setRemainTime(duration);
 
             if (duration.asMilliseconds() <= 0) {
                 clearInterval(intervalId);
-                if (confeti) {
-                    setReady(true);
-                }
-
-
+                setIsSet(false)
+                setReady(true);
             }
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [actual.datetime]);
+    }, [actual]);
     const addTime = () => {
         setIsSet(true)
 
+
     }
-    const deleteTime = (id) => {
-        setValues(values.filter(item => item.id !== id));
+    const deleteTime = (id, isAc = false) => {
+        const deldata = values.filter(item => item.id !== id)
+        const del = confirm('Do you want to delete this countdown?')
+        if (!del) return;
+
+        if (values.length === 1) {
+            setValues(deldata);
+            console.log('condtion1')
+            setValues([]);
+            setState('')
+            setIsSet(true)
+            setConfeti(false)
+            setReady(false)
+            return;
+        }
+        if (isAc) { //se aprieta el actual??
+            setValues(deldata);
+
+            let thebest = values.reduce((prev, curr) => {
+                let diffPrev = Math.abs(new Date(prev.datetime) - new Date());
+                let diffCurr = Math.abs(new Date(curr.datetime) - new Date());
+                return (diffPrev < diffCurr) ? prev : curr;
+            });
+            setState(thebest.id);
+            console.log(thebest.id)
+            actual = values.filter(v => v.id === state)[0]
+
+        } else {
+            console.log('condtion3')
+            setValues(deldata);
+
+        }
+
+        // if (values.length === 1) {
+        //     setState('')
+        //     setIsSet(true)
+        //     setConfeti(false)
+        //     setReady(false)
+        // } else if (isAc) {
+        //     let thebest = values.reduce((prev, curr) => {
+        //         let diffPrev = Math.abs(new Date(prev.datetime) - new Date());
+        //         let diffCurr = Math.abs(new Date(curr.datetime) - new Date());
+        //         return (diffPrev < diffCurr) ? prev : curr;
+        //     });
+        //     setState(thebest.id);
+        //     console.log(thebest.id)
+        //     actual = values.filter(v => v.id === state)[0]
+        //     console.log(actual)
+        // }
     }
     return (
         <div className="w-full flex flex-col  items-start">
@@ -75,7 +119,7 @@ export default function Counter({ setValues, setReady, ready, confeti, setConfet
                     sec
                 </div>}
             </div >
-                <h2 className="card-title py-3 font-bold text-2xl">Left for <span className="text-gray-600">{actual.description}</span></h2></>}
+                <h2 className="card-title py-3 font-bold text-2xl">Left for <span className="text-gray-600">{actual?.description}</span></h2></>}
             <div className="collapse bg-base-200">
                 <input type="checkbox" />
                 <div className="collapse-title text-sm font-normal"> Tap to see options</div>
@@ -112,7 +156,7 @@ export default function Counter({ setValues, setReady, ready, confeti, setConfet
                 <button className="btn text-sm w-1/3 btn-active text-white btn-info"><span className="material-symbols-outlined">
                     edit
                 </span></button>
-                <button onClick={() => deleteTime(state)} className="btn text-sm w-1/3 btn-active text-white btn-error"><span className="material-symbols-outlined">
+                <button onClick={() => deleteTime(state, true)} className="btn text-sm w-1/3 btn-active text-white btn-error"><span className="material-symbols-outlined">
                     delete
                 </span></button>
             </div>

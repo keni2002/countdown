@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Input from "./Input";
+import moment from "moment";
 
 export default function Setting({ setIsSet, saveCountDown, values, state, setState }) {
     const [description, setDescription] = useState('')
@@ -13,7 +14,8 @@ export default function Setting({ setIsSet, saveCountDown, values, state, setSta
         setTimeout(() => {
             setErr(''); setErrdate('')
         }, 3000)
-        if (!datetime || isNaN(new Date(datetime).getTime())) {
+        if ((!datetime || isNaN(new Date(datetime).getTime())) ||
+            (moment(datetime).diff(moment(), 'minutes') < 1)) {
             setErrdate('Please enter a valid date and time.'); validate = false
         }
         if (description === '') {
@@ -35,6 +37,12 @@ export default function Setting({ setIsSet, saveCountDown, values, state, setSta
             setDateTime('')
         }
 
+    }
+    const goBack = (e) => {
+        e.preventDefault()
+        setIsSet(false)
+        setDescription('')
+        setDateTime('')
     }
 
     return (
@@ -62,7 +70,9 @@ export default function Setting({ setIsSet, saveCountDown, values, state, setSta
 
 
                 <Input type='btn' label='Set countdown' id='btn' />
-            </form>
+            </form >
+            {state != '' && <button type="btn" className="btn btn-info" onClick={goBack}>Back</button>}
+
         </>
     )
 }

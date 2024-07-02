@@ -42,9 +42,11 @@ function App() {
                 values={values}
                 setIsSet={setIsSet} />)
               : (<Counter
+
                 setValues={setValues}
                 setIsSet={setIsSet}
                 state={state}
+                setState={setState}
                 values={values}
                 setReady={setReady}
                 ready={ready}
