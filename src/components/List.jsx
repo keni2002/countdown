@@ -1,5 +1,5 @@
 import moment from "moment"
-export default function List() {
+export default function List({ values, state }) {
     return (
         <>
             <div class="border-b-2 py-4 w-full border-gray-700 my-4"></div>
@@ -16,24 +16,24 @@ export default function List() {
                     </thead>
                     <tbody>
                         {/* row 1 */}
+                        {values.filter(v => v.id !== state)?.map(val => (
+                            <tr key={val.id}>
 
-                        <tr>
-
-                            <th><button><span class="material-symbols-outlined">
-                                play_circle
-                            </span></button></th>
-                            <td>{moment('2023-09-23T13:33').format('MMMM Do, YYYY [at] HH:mm')
-                            }</td>
-                            <td className="flex gap-3"><button><span class="material-symbols-outlined">
-                                edit
-                            </span></button>
-                                <button><span class="material-symbols-outlined">
-                                    delete
+                                <th><button><span class="material-symbols-outlined">
+                                    play_circle
+                                </span></button></th>
+                                <td>{moment(val.datetime).format('MMMM Do, YYYY [at] HH:mm')
+                                }</td>
+                                <td className="flex gap-3"><button><span class="material-symbols-outlined">
+                                    edit
                                 </span></button>
-                            </td>
+                                    <button><span className="material-symbols-outlined">
+                                        delete
+                                    </span></button>
+                                </td>
 
-                        </tr>
-
+                            </tr>)
+                        )}
                     </tbody>
                 </table>
             </div >

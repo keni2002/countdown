@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react"
 import moment from 'moment'
 import List from "./List"
-export default function Counter({ setReady, ready, confeti, setConfeti }) {
-    const datetime = '2024-07-02T08:01'
+export default function Counter({ setReady, ready, confeti, setConfeti, values, state }) {
+    const actual = values.filter(v => v.id === state)[0] //actual object in Proccess
+
     const [showSecond, setShowSecond] = useState(true)
     const [showList, setShowList] = useState(true)
 
 
-    const [remainTime, setRemainTime] = useState(moment.duration(moment(datetime).diff(moment())));
+    const [remainTime, setRemainTime] = useState(moment.duration(moment(actual.datetime).diff(moment())));
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            const duration = moment.duration(moment(datetime).diff(moment()));
+            const duration = moment.duration(moment(actual.datetime).diff(moment()));
             setRemainTime(duration);
 
             if (duration.asMilliseconds() <= 0) {
@@ -25,7 +26,7 @@ export default function Counter({ setReady, ready, confeti, setConfeti }) {
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [datetime]);
+    }, [actual.datetime]);
 
     return (
         <div className="w-full flex flex-col  items-start">
@@ -68,34 +69,48 @@ export default function Counter({ setReady, ready, confeti, setConfeti }) {
                     sec
                 </div>}
             </div >
-                <h2 className="card-title py-3 font-bold text-2xl">Left for <span className="text-gray-600">{'Regresar a Casa'}</span></h2></>}
-            <div className="flex-col w-1/3">
-                {!ready && <div className="form-control">
-                    <label className="cursor-pointer gap-2 label">
-                        <span className="text-sm label-text">Show seconds</span>
-                        <input type="checkbox" checked={showSecond} onChange={() => setShowSecond(!showSecond)} className="checkbox" />
-                    </label>
-                </div>}
-                <div className="form-control">
-                    <label className="cursor-pointer gap-2 label">
-                        <span className="text-sm label-text">Show List</span>
-                        <input type="checkbox" checked={showList} onChange={() => setShowList(!showList)} className="checkbox" />
-                    </label>
-                </div>
-                <div className="form-control">
-                    <label className="cursor-pointer gap-2 label">
-                        <span className="text-sm label-text">No Confetti!</span>
-                        <input type="checkbox" checked={confeti} onChange={() => setConfeti(!confeti)} className="checkbox" />
-                    </label>
+                <h2 className="card-title py-3 font-bold text-2xl">Left for <span className="text-gray-600">{actual.description}</span></h2></>}
+            <div className="collapse bg-base-200">
+                <input type="checkbox" />
+                <div className="collapse-title text-sm font-normal"> Tap to see options</div>
+                <div className="collapse-content">
+                    <div className="flex-col">
+                        {!ready && <div className="form-control">
+                            <label className="cursor-pointer gap-2 label">
+                                <span className="text-sm label-text">Show seconds</span>
+                                <input type="checkbox" checked={showSecond} onChange={() => setShowSecond(!showSecond)} className="checkbox" />
+                            </label>
+                        </div>}
+                        <div className="form-control">
+                            <label className="cursor-pointer gap-2 label">
+                                <span className="text-sm label-text">Show List</span>
+                                <input type="checkbox" checked={showList} onChange={() => setShowList(!showList)} className="checkbox" />
+                            </label>
+                        </div>
+                        <div className="form-control">
+                            <label className="cursor-pointer gap-2 label">
+                                <span className="text-sm label-text">No Confetti!</span>
+                                <input type="checkbox" checked={confeti} onChange={() => setConfeti(!confeti)} className="checkbox" />
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
 
-            <div className="flex pt-5 w-full justify-between">
-                <button className="btn text-sm  w-1/3 btn-active text-white btn-success">Add another counter</button>
-                <button className="btn text-sm w-1/3 btn-active text-white btn-error">Delete this</button>
+
+            <div className="flex pt-5 w-full justify-center gap-2">
+                <button className="btn text-sm  w-1/3 btn-active text-white btn-success"><span className="material-symbols-outlined">
+                    add
+                </span></button>
+                <button className="btn text-sm w-1/3 btn-active text-white btn-info"><span className="material-symbols-outlined">
+                    edit
+                </span></button>
+                <button className="btn text-sm w-1/3 btn-active text-white btn-error"><span className="material-symbols-outlined">
+                    delete
+                </span></button>
             </div>
-            {showList && <List />}
+            {showList && <List values={values} state={state} />}
         </div>
     )
 }

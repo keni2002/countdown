@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Input from "./Input";
 
-export default function Setting({ setIsSet, saveCountDown, values }) {
+export default function Setting({ setIsSet, saveCountDown, values, state, setState }) {
     const [description, setDescription] = useState('')
     const [datetime, setDateTime] = useState('')
     const [err, setErr] = useState('')
     const [errdate, setErrdate] = useState('')
+
     const handleSubmit = (e) => {
         e.preventDefault()
         let validate = true;
@@ -22,10 +23,16 @@ export default function Setting({ setIsSet, saveCountDown, values }) {
         if (validate) {
             setIsSet(false)
             const cnt = {
-                [description]: description,
-                [datetime]: datetime
+                description: description,
+                datetime: datetime
             }
-            saveCountDown(cnt)
+            const current = saveCountDown(cnt)
+
+            if (state == '') {
+                setState(current.id)
+            }
+            setDescription('')
+            setDateTime('')
         }
 
     }
