@@ -17,25 +17,26 @@ function App() {
       // setGastos(gastoUpdated);
     } else {
       countdown.id = crypto.randomUUID();
-      setGastos([...values, countdown])
+      setValues([...values, countdown])
     }
 
   }
 
   const [isSet, setIsSet] = useState(true);
   const [ready, setReady] = useState(false);
+  const [confeti, setConfeti] = useState(true)
   return (
     <>
-      {/* <Confetti />  */}
+      {ready && confeti && <Confetti />}
       <div className='flex justify-center items-center md:h-screen'>
         <div className="card bg-base-100 w-auto shadow-xl">
           <div className="card-body">
 
             {isSet ?
-              (<Setting setValues={setValues}
+              (<Setting saveCountDown={saveCountDown}
                 values={values}
                 setIsSet={setIsSet} />)
-              : (<Counter />)
+              : (<Counter setReady={setReady} ready={ready} confeti={confeti} setConfeti={setConfeti} />)
             }
           </div>
         </div>

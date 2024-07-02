@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Input from "./Input";
 
-export default function Setting({ setIsSet, setValues, values }) {
-    const [descripcion, setDescripcion] = useState('')
+export default function Setting({ setIsSet, saveCountDown, values }) {
+    const [description, setDescription] = useState('')
     const [datetime, setDateTime] = useState('')
     const [err, setErr] = useState('')
     const [errdate, setErrdate] = useState('')
@@ -15,13 +15,17 @@ export default function Setting({ setIsSet, setValues, values }) {
         if (!datetime || isNaN(new Date(datetime).getTime())) {
             setErrdate('Please enter a valid date and time.'); validate = false
         }
-        if (descripcion === '') {
+        if (description === '') {
             setErr(' Please enter a description'); validate = false
 
         }
         if (validate) {
             setIsSet(false)
-            setValues()
+            const cnt = {
+                [description]: description,
+                [datetime]: datetime
+            }
+            saveCountDown(cnt)
         }
 
     }
@@ -32,10 +36,10 @@ export default function Setting({ setIsSet, setValues, values }) {
             <form onSubmit={handleSubmit}>
                 <Input
                     type='input'
-                    value={descripcion}
+                    value={description}
                     label='Description of the date'
                     id='describe' ph="ex: Homecoming"
-                    onChange={setDescripcion}
+                    onChange={setDescription}
                     err={err}
                 />
                 <Input
