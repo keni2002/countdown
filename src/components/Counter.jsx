@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
 import moment from 'moment'
+import List from "./List"
 export default function Counter() {
     const datetime = '2026-09-02T22:00'
     const [showSecond, setShowSecond] = useState(true)
+    const [showList, setShowList] = useState(true)
     const [remainTime, setRemainTime] = useState(moment.duration(moment(datetime).diff(moment())));
 
     useEffect(() => {
@@ -63,14 +65,15 @@ export default function Counter() {
             <h2 className="card-title py-3 font-bold text-2xl">Left for <span className="text-gray-600">{'Regresar a Casa'}</span></h2>
             <div className="form-control">
                 <label className="cursor-pointer gap-2 label">
-                    <span className="label-text">Show seconds</span>
+                    <span className="text-sm label-text">Show seconds</span>
                     <input type="checkbox" checked={showSecond} onChange={() => setShowSecond(!showSecond)} className="checkbox" />
                 </label>
             </div>
             <div className="flex pt-5 w-full justify-between">
-                <button className="btn w-1/3 btn-active text-white btn-success">Add another counter</button>
-                <button className="btn w-1/3 btn-active text-white btn-error">Delete this</button>
+                <button className="btn text-sm  w-1/3 btn-active text-white btn-success">Add another counter</button>
+                <button className="btn text-sm w-1/3 btn-active text-white btn-error">Delete this</button>
             </div>
+            {showList && <List />}
         </div>
     )
 }

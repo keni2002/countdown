@@ -20,9 +20,8 @@ export default function Setting({ setIsSet, setValues, values }) {
 
         }
         if (validate) {
-
-            console.log('fsef')
             setIsSet(false)
+            setValues()
         }
 
     }
