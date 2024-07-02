@@ -5,6 +5,12 @@ import Confetti from 'react-confetti';
 function App() {
   const [values, setValues] = useState([]) //Array of all clocks
   const [state, setState] = useState('') //Here's datetimeRemain of clock that's running
+  const [isSet, setIsSet] = useState(true);
+  const [ready, setReady] = useState(false);
+  const [confeti, setConfeti] = useState(true)
+
+
+
   const saveCountDown = (countdown) => {
     //best way to edit
     if (countdown.id) {
@@ -20,9 +26,7 @@ function App() {
 
   }
 
-  const [isSet, setIsSet] = useState(true);
-  const [ready, setReady] = useState(false);
-  const [confeti, setConfeti] = useState(true)
+
   return (
     <>
       {ready && confeti && <Confetti />}
@@ -38,6 +42,8 @@ function App() {
                 values={values}
                 setIsSet={setIsSet} />)
               : (<Counter
+                setValues={setValues}
+                setIsSet={setIsSet}
                 state={state}
                 values={values}
                 setReady={setReady}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import moment from 'moment'
 import List from "./List"
-export default function Counter({ setReady, ready, confeti, setConfeti, values, state }) {
+export default function Counter({ setValues, setReady, ready, confeti, setConfeti, values, state, setIsSet }) {
     const actual = values.filter(v => v.id === state)[0] //actual object in Proccess
 
     const [showSecond, setShowSecond] = useState(true)
@@ -27,7 +27,13 @@ export default function Counter({ setReady, ready, confeti, setConfeti, values, 
 
         return () => clearInterval(intervalId);
     }, [actual.datetime]);
+    const addTime = () => {
+        setIsSet(true)
 
+    }
+    const deleteTime = (id) => {
+        setValues(values.filter(item => item.id !== id));
+    }
     return (
         <div className="w-full flex flex-col  items-start">
 
@@ -100,17 +106,17 @@ export default function Counter({ setReady, ready, confeti, setConfeti, values, 
 
 
             <div className="flex pt-5 w-full justify-center gap-2">
-                <button className="btn text-sm  w-1/3 btn-active text-white btn-success"><span className="material-symbols-outlined">
+                <button onClick={addTime} className="btn text-sm  w-1/3 btn-active text-white btn-success"><span className="material-symbols-outlined">
                     add
                 </span></button>
                 <button className="btn text-sm w-1/3 btn-active text-white btn-info"><span className="material-symbols-outlined">
                     edit
                 </span></button>
-                <button className="btn text-sm w-1/3 btn-active text-white btn-error"><span className="material-symbols-outlined">
+                <button onClick={() => deleteTime(state)} className="btn text-sm w-1/3 btn-active text-white btn-error"><span className="material-symbols-outlined">
                     delete
                 </span></button>
             </div>
-            {showList && <List values={values} state={state} />}
+            {showList && <List deleteTime={deleteTime} setValues={setValues} values={values} state={state} />}
         </div>
     )
 }

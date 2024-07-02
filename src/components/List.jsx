@@ -1,5 +1,5 @@
 import moment from "moment"
-export default function List({ values, state }) {
+export default function List({ values, state, deleteTime }) {
     return (
         <>
             <div class="border-b-2 py-4 w-full border-gray-700 my-4"></div>
@@ -27,7 +27,7 @@ export default function List({ values, state }) {
                                 <td className="flex gap-3"><button><span class="material-symbols-outlined">
                                     edit
                                 </span></button>
-                                    <button><span className="material-symbols-outlined">
+                                    <button onClick={() => deleteTime(val.id)}><span className="material-symbols-outlined">
                                         delete
                                     </span></button>
                                 </td>
