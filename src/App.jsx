@@ -14,10 +14,7 @@ function App() {
   const saveCountDown = (countdown) => {
     //best way to edit
     if (countdown.id) {
-      // const gastoUpdated = gastos.map(
-      //   g => g.id === gasto.id ? gasto : g
-      // )
-      // setGastos(gastoUpdated);
+
     } else {
       countdown.id = crypto.randomUUID();
       setValues([...values, countdown])

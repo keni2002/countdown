@@ -44,7 +44,8 @@ export default function Counter({ setValues, setReady, ready, confeti, setConfet
             return;
         }
         if (isAc) { //se aprieta el actual??
-            setValues(deldata);
+
+            setValues(values => values.filter(item => item.id !== id));
 
             let thebest = values.reduce((prev, curr) => {
                 let diffPrev = Math.abs(new Date(prev.datetime) - new Date());
@@ -60,23 +61,6 @@ export default function Counter({ setValues, setReady, ready, confeti, setConfet
             setValues(deldata);
 
         }
-
-        // if (values.length === 1) {
-        //     setState('')
-        //     setIsSet(true)
-        //     setConfeti(false)
-        //     setReady(false)
-        // } else if (isAc) {
-        //     let thebest = values.reduce((prev, curr) => {
-        //         let diffPrev = Math.abs(new Date(prev.datetime) - new Date());
-        //         let diffCurr = Math.abs(new Date(curr.datetime) - new Date());
-        //         return (diffPrev < diffCurr) ? prev : curr;
-        //     });
-        //     setState(thebest.id);
-        //     console.log(thebest.id)
-        //     actual = values.filter(v => v.id === state)[0]
-        //     console.log(actual)
-        // }
     }
     return (
         <div className="w-full flex flex-col  items-start">
